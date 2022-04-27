@@ -398,7 +398,7 @@ app.post("/confess", async (req, res) => {
 
     })
     const confess_done = await confess_data.save();
-    res.render("home");
+    res.render("index");
 
   } catch (err) {
     console.log(err);
