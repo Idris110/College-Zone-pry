@@ -9,8 +9,6 @@ const book_data = require("./src/models/sell_book");
 const post_data = require("./src/models/postdata");
 const confession = require("./src/models/confess");
 const doubt_model = require("./src/models/doubts");
-const contact_model = require("./src/models/contact_us");
-const info_model = require("./src/models/info");
 const auth = require("./src/middleware/auth");
 const user_auth = require("./src/middleware/user_auth");
 const nodemailer = require("nodemailer");
@@ -94,12 +92,7 @@ app.get("/error", (req, res) => {
   res.render("error");
 });
 
-app.post("/image_up3", (req, res) => {
-  console.log("hi guys");
-  console.log(req.body.selfLink);
 
-  res.render("upload2",req.body.selfLink);
-});
 app.get("/upload2", (req, res) => {
   res.render("upload2");
 });
@@ -359,7 +352,7 @@ app.post("/upload", async (req, res) => {
       attach_links: req.body.lastname,
       importance: req.body.gender,
       phone: req.body.phone,
-      date: req.body.age,
+      date: String(req.body.age).slice(0,10),
       main_link: req.body.email,
       description:req.body.description,
       // password: securepassword(password),
@@ -481,25 +474,6 @@ app.get("/see_books", async (req, res) => {
   }
   
 })
-app.get("/see_info", async (req, res) => {
-  try {
-    info_model.find({}, function (err, users) {
-      if (err) {
-        console.log(err);
-
-      }
-      console.log(users);
-      res.render("see_info", { da: users });
-
-    })
-
-  }
-  catch (error) {
-    console.log(error);
-
-  }
-  
-})
 app.get("/see_books_data", async (req, res) => {
   try {
     book_data.find({}, function (err, users) {
@@ -528,9 +502,6 @@ app.get("/free_google_books",async (req,res)=>{
 app.get("/ask_doubt",async (req,res)=>{
   res.render("ask_doubt");
 })
-app.get("/put_info",async (req,res)=>{
-  res.render("put_info");
-})
 app.get("/see_post", async (req, res) => {
   try {
     post_data.find({}, function (err, users) {
@@ -540,15 +511,11 @@ app.get("/see_post", async (req, res) => {
       }
       console.log(users);
       res.render("see_post", { da: users });
-
     })
-
   }
   catch (error) {
     console.log(error);
-
   }
-  
 })
 
 app.get("/see_confession", async (req, res) => {
@@ -567,46 +534,6 @@ app.get("/see_confession", async (req, res) => {
   catch (error) {
     console.log(error);
 
-  }
-
-})
-app.post("/put_info", async (req, res) => {
-  try {
-    console.log(req.body.doubt);
-    const doubt_data = new info_model({
-      name:req.body.doubt_name,
-      title: req.body.doubt_title,
-      description: req.body.doubt,
-      
-
-
-    })
-    const book_done = await doubt_data.save();
-    res.render("index");
-
-  } catch (err) {
-    console.log(err);
-  }
-
-})
-app.post("/contact_us", async (req, res) => {
-  try {
-
-    const contact_data = new contact_model({
-      name:req.body.name,
-      message: req.body.message,
-      subject: req.body.subject,
-      email:req.body.email,
-      phone:req.body.phone
-      
-
-
-    })
-    const contact_done = await contact_data.save();
-    res.render("index");
-
-  } catch (err) {
-    console.log(err);
   }
 
 })
